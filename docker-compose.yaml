@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # ===== Eureka Service Discovery =====
   service-discovery:
@@ -214,6 +212,21 @@ services:
       SPRING_PROFILES_ACTIVE: docker
     ports:
       - "8080:8080"
+    networks:
+      - app-network
+
+  # В разделе services добавьте:
+  frontend:
+    build: ./frontend  # УДАЛИТЕ target: development
+    container_name: frontend-app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_API_URL=http://localhost:8080/api
     networks:
       - app-network
 
